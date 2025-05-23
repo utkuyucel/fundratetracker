@@ -2,7 +2,7 @@
 
 class FedRateDashboard {
     constructor() {
-        this.currentPeriod = '1year';
+        this.currentPeriod = 'all';
         this.initEventListeners();
         this.loadChart();
     }
