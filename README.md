@@ -76,21 +76,21 @@ flowchart TD
 
 1. **Clone the repository**
 
-   ```bash
+   ```
    git clone https://github.com/utkuyucel/fundratetracker.git
    cd fundratetracker
    ```
 
 2. **Configure environment**
 
-   ```bash
+   ```
    cp .env.example .env
    # Edit .env to add your Alpha Vantage API key
    ```
 
 3. **Start all services**
 
-   ```bash
+   ```
    docker-compose up -d
    ```
 
@@ -101,7 +101,7 @@ flowchart TD
 
 5. **Test the API**
 
-   ```bash
+   ```
    curl http://localhost:8000/health
    curl http://localhost:8000/api/rates/latest
    ```
