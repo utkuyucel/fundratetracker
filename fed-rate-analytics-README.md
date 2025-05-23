@@ -138,6 +138,48 @@ docker-compose logs -f dashboard
 docker-compose ps
 ```
 
+## Data Initialization
+
+The project includes automatic database initialization:
+
+- **SQL Schema**: The `sql/init.sql` file contains all necessary table definitions and indexes
+- **Auto-Setup**: When PostgreSQL starts for the first time, it automatically executes the initialization script
+- **Data Population**: The ETL pipeline will populate data from Alpha Vantage API when triggered
+
+### Manual Data Population (Optional)
+
+If you want to immediately populate data without waiting for the scheduler:
+
+```bash
+# Trigger ETL pipeline manually via API
+curl -X POST http://localhost:8000/api/pipeline/trigger
+
+# Or run ETL directly inside the container
+docker-compose exec app python -c "import asyncio; from etl_pipeline import FedRateETL; asyncio.run(FedRateETL().run_pipeline())"
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Not Set**: Ensure your Alpha Vantage API key is properly set in `.env`
+2. **Database Connection**: Check PostgreSQL health with `docker-compose logs postgres`
+3. **Port Conflicts**: Ensure ports 5432, 6379, 8000, and 5001 are available
+4. **API Rate Limits**: Alpha Vantage has rate limits; the ETL includes error handling
+
+### Health Checks
+
+```bash
+# Check API health
+curl http://localhost:8000/health
+
+# Check dashboard health  
+curl http://localhost:5001/health
+
+# Check database connection
+docker-compose exec postgres pg_isready -U dataeng -d fed_analytics
+```
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
