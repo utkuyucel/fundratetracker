@@ -6,7 +6,7 @@ A beautiful, interactive web dashboard for visualizing Federal Reserve interest 
 
 - 📊 **Interactive Time Series Charts** - Plotly.js powered visualizations
 - 📈 **Multiple Time Periods** - 1M, 3M, 6M, 1Y, 5Y, and All-time views
-- 📋 **Real-time Analytics** - Live statistics and moving averages
+- 📋 **Moving Averages** - 30-day, 90-day and 365-day moving averages
 - 🎨 **Modern UI** - Bootstrap 5 with custom styling
 - 📱 **Responsive Design** - Works on desktop, tablet, and mobile
 - 🔄 **Live Data** - Connects to FastAPI backend for real-time data
@@ -17,28 +17,21 @@ A beautiful, interactive web dashboard for visualizing Federal Reserve interest 
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Flask App     │───►│   FastAPI       │───►│   PostgreSQL    │
 │   Dashboard     │    │   Backend       │    │   Database      │
-│   (Port 5000)   │    │   (Port 8000)   │    │   (Port 5432)   │
+│   (Port 5001)   │    │   (Port 8000)   │    │   (Port 5432)   │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## Dashboard Pages
+## Dashboard Features
 
-### 1. Main Dashboard (`/`)
+### Main Dashboard (`/`)
 - **Summary Cards**: Current rate, historical high/low, average rate
 - **Interactive Time Series Chart**: Federal Funds Rate over time
 - **Moving Averages**: 30-day, 90-day, and 365-day averages
 - **Period Selector**: Quick filters for different time ranges
 
-### 2. Analytics Page (`/analytics`)
-- **Detailed Statistics**: Comprehensive statistical summary
-- **Rate Distribution**: Histogram showing rate frequency
-- **Moving Averages Analysis**: Detailed breakdown with comparisons
-- **Key Insights**: Automated analysis and trends
-
 ## API Endpoints
 
 - `GET /` - Main dashboard page
-- `GET /analytics` - Analytics page
 - `GET /health` - Health check
 - `GET /api/chart-data?period=<period>` - Chart data for specified period
 
@@ -52,12 +45,29 @@ A beautiful, interactive web dashboard for visualizing Federal Reserve interest 
 
 ## Quick Start
 
-### Prerequisites
+### Option 1: Docker (Recommended)
+
+Run the entire system (API backend, database, Redis, and dashboard) using Docker:
+
+```bash
+# Navigate to the project root directory
+cd /home/utku/fundratetracker/fed-rate-analytics
+
+# Start all services with Docker Compose
+docker-compose up -d
+
+# Access the dashboard at:
+# http://localhost:5001
+```
+
+### Option 2: Local Development
+
+#### Prerequisites
 - Python 3.11+
 - FastAPI backend running on port 8000
 - Virtual environment support
 
-### Installation
+#### Installation
 
 1. **Navigate to dashboard directory**:
    ```bash
@@ -81,11 +91,10 @@ A beautiful, interactive web dashboard for visualizing Federal Reserve interest 
    ```
 
 5. **Access the dashboard**:
-   - Main Dashboard: http://localhost:5000
-   - Analytics: http://localhost:5000/analytics
-   - Health Check: http://localhost:5000/health
+   - Dashboard: http://localhost:5001
+   - Health Check: http://localhost:5001/health
 
-### Using the Startup Script
+#### Using the Startup Script
 
 Alternatively, use the provided startup script:
 ```bash
@@ -160,8 +169,7 @@ app.run(debug=True, host='0.0.0.0', port=5000)
 1. Create new routes in `app.py`
 2. Add corresponding templates in `templates/`
 3. Add JavaScript functionality in `static/js/`
-4. Style with CSS in `static/css/dashboard.css`
-
+4. Style with CSS in `static/css/dashboard.cs 
 ### Debugging
 Enable Flask debug mode (already enabled):
 ```python

@@ -9,7 +9,9 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 # FastAPI backend URL
-API_BASE_URL = "http://localhost:8000"
+# Use the service name defined in docker-compose.yml when running in Docker
+import os
+API_BASE_URL = os.environ.get("API_BASE_URL", "http://app:8000")
 
 class FedRateDashboard:
     def __init__(self, api_base_url):
@@ -134,8 +136,10 @@ def health():
     return jsonify({
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "service": "Fed Rate Dashboard"
+        "service": "Fed Rate Dashboard",
+        "api_connection": API_BASE_URL
     })
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Production deployment would disable debug mode
+    app.run(debug=True, host='0.0.0.0', port=5001)

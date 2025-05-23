@@ -29,5 +29,5 @@ else
 fi
 
 # Start Flask dashboard
-echo "🌐 Starting Flask dashboard on http://localhost:5000"
+echo "🌐 Starting Flask dashboard on http://localhost:5001"
 python app.py

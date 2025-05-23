@@ -3,6 +3,27 @@
 ## Project Overview
 A production-ready data engineering project that demonstrates ETL pipelines, containerization, and financial data analytics using Federal Reserve interest rate data from Alpha Vantage API.
 
+## Quick Start
+
+### Prerequisites
+- Docker and Docker Compose
+- Alpha Vantage API key (free at https://www.alphavantage.co/support/#api-key)
+
+### Running with Docker
+1. Clone this repository
+2. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env to add your Alpha Vantage API key
+   ```
+3. Start all services:
+   ```bash
+   docker-compose up -d
+   ```
+4. Access the applications:
+   - Dashboard: http://localhost:5001
+   - API: http://localhost:8000
+
 ## Architecture
 
 ```
