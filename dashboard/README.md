@@ -51,7 +51,7 @@ Run the entire system (API backend, database, Redis, and dashboard) using Docker
 
 ```bash
 # Navigate to the project root directory
-cd /home/utku/fundratetracker/fed-rate-analytics
+cd /home/utku/fundratetracker
 
 # Start all services with Docker Compose
 docker-compose up -d
@@ -71,7 +71,7 @@ docker-compose up -d
 
 1. **Navigate to dashboard directory**:
    ```bash
-   cd /home/utku/fundratetracker/fed-rate-analytics/dashboard
+   cd /home/utku/fundratetracker/dashboard
    ```
 
 2. **Create and activate virtual environment**:

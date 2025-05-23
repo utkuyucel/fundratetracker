@@ -46,7 +46,7 @@ flowchart TD
 
    ```bash
    git clone https://github.com/utkuyucel/fundratetracker.git
-   cd fed-rate-analytics
+   cd fundratetracker
    ```
 
 2. **Configure environment**
@@ -77,7 +77,7 @@ flowchart TD
 ## Project Structure
 
 ```
-fed-rate-analytics/
+fundratetracker/
 ├── docker-compose.yml
 ├── Dockerfile              # FastAPI app Dockerfile
 ├── .env.example

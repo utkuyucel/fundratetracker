@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db, FederalFundsRate
+from database import get_db
 from analytics import FedRateAnalytics
 from etl_pipeline import FedRateETL
-from datetime import date, datetime
+from datetime import datetime
+from typing import Optional
 import asyncio
 
 app = FastAPI(
@@ -37,8 +38,8 @@ async def get_latest_rate(db: Session = Depends(get_db)):
 
 @app.get("/api/rates/historical")
 async def get_historical_rates(
-    start_date: str = None,
-    end_date: str = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
     limit: int = 100,
     db: Session = Depends(get_db)
 ):
