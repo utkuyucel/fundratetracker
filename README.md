@@ -76,21 +76,21 @@ flowchart TD
 
 1. **Clone the repository**
 
-   ```bash
+   ```
    git clone https://github.com/utkuyucel/fundratetracker.git
    cd fundratetracker
    ```
 
 2. **Configure environment**
 
-   ```bash
+   ```
    cp .env.example .env
    # Edit .env to add your Alpha Vantage API key
    ```
 
 3. **Start all services**
 
-   ```bash
+   ```
    docker-compose up -d
    ```
 
@@ -101,7 +101,7 @@ flowchart TD
 
 5. **Test the API**
 
-   ```bash
+   ```
    curl http://localhost:8000/health
    curl http://localhost:8000/api/rates/latest
    ```
@@ -156,7 +156,7 @@ fundratetracker/
 
 ## Monitoring and Logs
 
-```bash
+```
 # View all service logs
 docker-compose logs -f
 
@@ -182,7 +182,7 @@ The project includes automatic database initialization:
 
 If you want to immediately populate data without waiting for the scheduler:
 
-```bash
+```
 # Trigger ETL pipeline manually via API
 curl -X POST http://localhost:8000/api/pipeline/trigger
 
@@ -201,7 +201,7 @@ docker-compose exec app python -c "import asyncio; from etl_pipeline import FedR
 
 ### Health Checks
 
-```bash
+```
 # Check API health
 curl http://localhost:8000/health
 
