@@ -1,197 +1,129 @@
-# Federal Funds Rate Analytics Platform - Portfolio Project
+# Federal Funds Rate Analytics Platform
 
-## Project Overview
-A production-ready data engineering project that demonstrates ETL pipelines, containerization, and financial data analytics using Federal Reserve interest rate data from Alpha Vantage API.
+A production-ready data engineering project that demonstrates ETL pipelines, containerization, and financial data analytics using Federal Reserve interest rate data from the Alpha Vantage API.
+
+## Architecture
+
+```mermaid
+flowchart TD
+    AV[Alpha Vantage API] -->|Fetch Data| ETL[ETL Pipeline]
+    ETL -->|Store Data| DB[(PostgreSQL)]
+    DB <-->|Query Data| API[FastAPI Backend]
+    API -->|Cache Results| REDIS[(Redis Cache)]
+    REDIS -->|Retrieve Cache| API
+    API <-->|Data Exchange| DASH[Flask Dashboard]
+    
+    classDef external fill:#bbdefb,stroke:#333,stroke-width:1px,color:#000;
+    classDef storage fill:#e8f5e9,stroke:#333,stroke-width:1px,color:#333;
+    classDef frontend fill:#fff3e0,stroke:#333,stroke-width:1px,color:#333;
+    
+    class AV external;
+    class DB,REDIS storage;
+    class DASH frontend;
+```
+
+## Tech Stack
+
+- **Backend**: Python 3.11, FastAPI, SQLAlchemy
+- **Database**: PostgreSQL 15
+- **Cache**: Redis 7
+- **Frontend**: Flask, Plotly.js
+- **Containerization**: Docker, Docker Compose
+- **Data Processing**: Pandas, NumPy
+- **API**: Alpha Vantage Federal Reserve Data
+- **Scheduling**: Python Schedule
 
 ## Quick Start
 
 ### Prerequisites
-- Docker and Docker Compose
-- Alpha Vantage API key (free at https://www.alphavantage.co/support/#api-key)
 
-### Running with Docker
-1. Clone this repository
-2. Set up environment variables:
+- Docker and Docker Compose
+- Alpha Vantage API key (free at [alphavantage.co](https://www.alphavantage.co/support/#api-key))
+
+### Setup and Run
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/utkuyucel/fundratetracker.git
+   cd fed-rate-analytics
+   ```
+
+2. **Configure environment**
+
    ```bash
    cp .env.example .env
    # Edit .env to add your Alpha Vantage API key
    ```
-3. Start all services:
+
+3. **Start all services**
+
    ```bash
    docker-compose up -d
    ```
-4. Access the applications:
-   - Dashboard: http://localhost:5001
-   - API: http://localhost:8000
 
-## Architecture
+4. **Access the applications**
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Alpha Vantage │────│  Python ETL     │────│   PostgreSQL    │
-│      API        │    │   Pipeline      │    │    Database     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                              │
-                              │
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│     Redis       │────│    FastAPI      │────│   Analytics     │
-│    Cache        │    │   Web Server    │    │   Dashboard     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+   - Dashboard: [http://localhost:5001](http://localhost:5001)
+   - API Documentation: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-## File Structure
+5. **Test the API**
+
+   ```bash
+   curl http://localhost:8000/health
+   curl http://localhost:8000/api/rates/latest
+   ```
+
+## Project Structure
+
 ```
 fed-rate-analytics/
 ├── docker-compose.yml
-├── Dockerfile
+├── Dockerfile              # FastAPI app Dockerfile
 ├── .env.example
-├── .env
 ├── README.md
-├── app/
+├── app/                    # FastAPI backend service
 │   ├── main.py
 │   ├── etl_pipeline.py
 │   ├── database.py
 │   ├── analytics.py
 │   ├── scheduler.py
 │   └── requirements.txt
+├── dashboard/              # Flask dashboard service
+│   ├── Dockerfile
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── templates/
+│   └── static/
 └── sql/
     └── init.sql
 ```
 
-## Tech Stack
-- **Backend**: Python 3.11, FastAPI, SQLAlchemy
-- **Database**: PostgreSQL 15
-- **Cache**: Redis 7
-- **Data Processing**: Pandas, NumPy
-- **Containerization**: Docker, Docker Compose
-- **API**: Alpha Vantage Federal Reserve Data
-- **Scheduling**: Python Schedule
-
-## Features
-- ✅ **Automated ETL Pipeline** - Extracts, transforms, and loads Federal Funds Rate data
-- ✅ **RESTful API** - Comprehensive endpoints for data access and analytics
-- ✅ **Time-Series Analytics** - Moving averages, volatility calculations, statistical summaries
-- ✅ **Containerized Architecture** - Production-ready Docker setup
-- ✅ **Data Persistence** - PostgreSQL with optimized indexing
-- ✅ **Caching Layer** - Redis for performance optimization
-- ✅ **Health Monitoring** - API health checks and logging
-- ✅ **Scheduled Jobs** - Automated data fetching and processing
-
-## Quick Start
-
-### Prerequisites
-- Docker and Docker Compose installed
-- Alpha Vantage API key (free at https://www.alphavantage.co/support/#api-key)
-
-### Setup Instructions
-
-1. **Clone and navigate to project**:
-   ```bash
-   cd /home/utku/fundratetracker/fed-rate-analytics
-   ```
-
-2. **Configure environment** (already set up with your API key):
-   ```bash
-   # .env file is already configured with your Alpha Vantage key
-   cat .env
-   ```
-
-3. **Launch services**:
-   ```bash
-   docker-compose up -d
-   ```
-
-4. **Wait for services to be ready** (about 30 seconds):
-   ```bash
-   docker-compose logs -f
-   ```
-
-5. **Test the API**:
-   ```bash
-   curl http://localhost:8000/health
-   curl http://localhost:8000/api/pipeline/trigger
-   curl http://localhost:8000/api/rates/latest
-   ```
-
 ## API Endpoints
 
 ### Core Endpoints
+
 - `GET /` - API information and version
 - `GET /health` - Health check status
 
 ### Data Endpoints
+
 - `GET /api/rates/latest` - Get the most recent Federal Funds Rate
 - `GET /api/rates/historical` - Historical data with optional date filtering
   - Query params: `start_date`, `end_date`, `limit`
   - Date format: `YYYY-MM-DD`
 
 ### Analytics Endpoints
+
 - `GET /api/analytics/summary` - Comprehensive statistical summary
 - `GET /api/analytics/moving-averages` - Moving averages (30, 90, 365 days)
 
 ### Pipeline Management
+
 - `POST /api/pipeline/trigger` - Manually trigger ETL pipeline
 
-## Example API Usage
+## Monitoring and Logs
 
-```bash
-# Get latest rate
-curl http://localhost:8000/api/rates/latest
-
-# Get historical data for 2023
-curl "http://localhost:8000/api/rates/historical?start_date=2023-01-01&end_date=2023-12-31"
-
-# Get analytics summary
-curl http://localhost:8000/api/analytics/summary
-
-# Trigger data refresh
-curl -X POST http://localhost:8000/api/pipeline/trigger
-```
-
-## Data Schema
-
-### Federal Funds Rates Table
-```sql
-federal_funds_rates (
-    id SERIAL PRIMARY KEY,
-    date DATE NOT NULL UNIQUE,
-    rate DECIMAL(5,2) NOT NULL,
-    rate_change DECIMAL(5,2),
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
-)
-```
-
-### Analytics Table
-```sql
-rate_analytics (
-    id SERIAL PRIMARY KEY,
-    calculation_date DATE NOT NULL,
-    avg_30_day DECIMAL(5,2),
-    avg_90_day DECIMAL(5,2),
-    avg_365_day DECIMAL(5,2),
-    volatility_30_day DECIMAL(8,4),
-    min_rate_ytd DECIMAL(5,2),
-    max_rate_ytd DECIMAL(5,2),
-    created_at TIMESTAMP
-)
-```
-
-## Development
-
-### Local Development Setup
-```bash
-# Install Python dependencies
-cd app && pip install -r requirements.txt
-
-# Run database migrations
-# (handled automatically by docker-compose)
-
-# Start FastAPI development server
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Monitoring and Logs
 ```bash
 # View all service logs
 docker-compose logs -f
@@ -200,72 +132,12 @@ docker-compose logs -f
 docker-compose logs -f app
 docker-compose logs -f postgres
 docker-compose logs -f redis
+docker-compose logs -f dashboard
 
 # Check service status
 docker-compose ps
 ```
 
-### Database Access
-```bash
-# Connect to PostgreSQL
-docker exec -it fed_postgres psql -U dataeng -d fed_analytics
-
-# Common queries
-SELECT COUNT(*) FROM federal_funds_rates;
-SELECT * FROM federal_funds_rates ORDER BY date DESC LIMIT 10;
-```
-
-## Portfolio Highlights
-
-### Data Engineering
-- **ETL Pipeline**: Robust extract, transform, load process with error handling
-- **Data Modeling**: Optimized PostgreSQL schema with proper indexing
-- **API Integration**: Professional integration with Alpha Vantage financial API
-
-### Software Architecture
-- **Microservices**: Containerized services with clear separation of concerns
-- **Scalability**: Redis caching and optimized database queries
-- **Reliability**: Health checks, error handling, and comprehensive logging
-
-### DevOps & Production
-- **Containerization**: Docker Compose orchestration for local and production deployment
-- **Configuration Management**: Environment-based configuration with .env files
-- **Monitoring**: Health endpoints and structured logging
-
-### Data Analytics
-- **Time-Series Analysis**: Moving averages and volatility calculations
-- **Statistical Computing**: NumPy and Pandas for efficient data processing
-- **Financial Metrics**: Federal Reserve economic indicators and trends
-
-## Technical Decisions
-
-### Why PostgreSQL?
-- Excellent support for time-series data with date indexing
-- ACID compliance for financial data integrity
-- Mature ecosystem and performance optimization
-
-### Why FastAPI?
-- Automatic API documentation with OpenAPI/Swagger
-- Type hints and data validation with Pydantic
-- High performance and modern Python async support
-
-### Why Redis?
-- Fast caching layer for frequently accessed analytics
-- Simple key-value storage for computed metrics
-- Excellent Docker integration
-
-## Future Enhancements
-- [ ] Real-time data streaming with WebSockets
-- [ ] Interactive dashboard with Plotly/Dash
-- [ ] Machine learning models for rate prediction
-- [ ] Kubernetes deployment configuration
-- [ ] CI/CD pipeline with GitHub Actions
-- [ ] Prometheus metrics and Grafana dashboards
-
-## Author
-**Utku Yucel**
-- Email: utkuyucel35@gmail.com
-- GitHub: @utkuyucel
-
 ## License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
