@@ -6,18 +6,50 @@ A comprehensive financial analytics platform for tracking and analyzing Federal 
 
 ```mermaid
 flowchart TD
-    AV[Alpha Vantage API] -->|Fetch Data| ETL[ETL Pipeline]
-    ETL -->|Store Data| DB[(PostgreSQL)]
-    DB <-->|Query Data| API[FastAPI Backend]
-    API -->|Cache Results| REDIS[(Redis Cache)]
-    REDIS -->|Retrieve Cache| API
-    API <-->|Data Exchange| DASH[Flask Dashboard]
+    %% External Data Source
+    AV[Alpha Vantage API]
     
-    classDef external fill:#bbdefb,stroke:#333,stroke-width:1px,color:#000;
-    classDef storage fill:#e8f5e9,stroke:#333,stroke-width:1px,color:#333;
-    classDef frontend fill:#fff3e0,stroke:#333,stroke-width:1px,color:#333;
+    %% Docker Containers
+    subgraph DOCKER1[🐳 FastAPI Container]
+        ETL[ETL Pipeline<br/>Extract → Transform → Load]
+        API[FastAPI Backend<br/>REST API & Analytics]
+        ETL -.-> API
+    end
+    
+    subgraph DOCKER2[🐳 PostgreSQL Container]
+        DB[(PostgreSQL Database<br/>Federal Funds Data)]
+    end
+    
+    subgraph DOCKER3[🐳 Redis Container]
+        REDIS[(Redis Cache<br/>API Response Cache)]
+    end
+    
+    subgraph DOCKER4[🐳 Dashboard Container]
+        DASH[Flask Dashboard<br/>Interactive Charts]
+    end
+    
+    %% Data Flow
+    AV -->|Fetch Data| ETL
+    ETL -->|Store Data| DB
+    DB <-->|Query Data| API
+    API <-->|Cache Results| REDIS
+    API <-->|REST API| DASH
+    
+    %% Styling
+    classDef external fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000;
+    classDef container fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000;
+    classDef storage fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000;
+    classDef frontend fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000;
+    
+    %% Arrow styling
+    linkStyle 0 stroke:#1976d2,stroke-width:3px,color:#000
+    linkStyle 1 stroke:#388e3c,stroke-width:3px,color:#000
+    linkStyle 2 stroke:#1976d2,stroke-width:3px,color:#000
+    linkStyle 3 stroke:#7b1fa2,stroke-width:3px,color:#000
+    linkStyle 4 stroke:#f57c00,stroke-width:3px,color:#000
     
     class AV external;
+    class DOCKER1,DOCKER2,DOCKER3,DOCKER4 container;
     class DB,REDIS storage;
     class DASH frontend;
 ```
