@@ -214,4 +214,4 @@ docker-compose exec postgres pg_isready -U dataeng -d fed_analytics
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
