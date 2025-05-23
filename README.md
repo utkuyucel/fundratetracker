@@ -1,6 +1,6 @@
 # Federal Funds Rate Analytics Platform
 
-A production-ready data engineering project that demonstrates ETL pipelines, containerization, and financial data analytics using Federal Reserve interest rate data from the Alpha Vantage API.
+A comprehensive financial analytics platform for tracking and analyzing Federal Reserve interest rate changes. This system provides real-time insights into monetary policy trends through automated data collection, advanced analytics, and interactive visualizations.
 
 ## Architecture
 
