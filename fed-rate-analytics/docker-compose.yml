@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fed_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-fed_analytics}
+      POSTGRES_USER: ${POSTGRES_USER:-dataeng}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - fed_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dataeng -d fed_analytics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: fed_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - fed_network
+    command: redis-server --appendonly yes
+
+  app:
+    build: .
+    container_name: fed_analytics_app
+    environment:
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+      - DATABASE_URL=postgresql://dataeng:secure_password@postgres:5432/fed_analytics
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    networks:
+      - fed_network
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  fed_network:
+    driver: bridge
