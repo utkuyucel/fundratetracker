@@ -21,41 +21,12 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7-alpine
-    container_name: fed_redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - fed_network
-    command: >
-      redis-server 
-      --appendonly yes 
-      --appendfsync everysec 
-      --auto-aof-rewrite-percentage 100 
-      --auto-aof-rewrite-min-size 64mb 
-      --maxmemory 256mb 
-      --maxmemory-policy allkeys-lru 
-      --stop-writes-on-bgsave-error no 
-      --rdbcompression yes 
-      --rdbchecksum yes 
-      --timeout 300 
-      --tcp-keepalive 300
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
   app:
     build: .
     container_name: fed_analytics_app
     environment:
       - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
       - DATABASE_URL=postgresql://dataeng:secure_password@postgres:5432/fed_analytics
-      - REDIS_URL=redis://redis:6379/0
     ports:
       - "8000:8000"
     volumes:
@@ -64,7 +35,6 @@ services:
       - fed_network
     depends_on:
       - postgres
-      - redis
 
   dashboard:
     build: ./dashboard
@@ -82,7 +52,6 @@ services:
 
 volumes:
   postgres_data:
-  redis_data:
 
 networks:
   fed_network:

@@ -20,11 +20,7 @@ flowchart TD
         DB[(PostgreSQL Database<br/>Federal Funds Data)]
     end
     
-    subgraph DOCKER3[🐳 Redis Container]
-        REDIS[(Redis Cache<br/>API Response Cache)]
-    end
-    
-    subgraph DOCKER4[🐳 Dashboard Container]
+    subgraph DOCKER3[🐳 Dashboard Container]
         DASH[Flask Dashboard<br/>Interactive Charts]
     end
     
@@ -32,7 +28,6 @@ flowchart TD
     AV -->|Fetch Data| ETL
     ETL -->|Store Data| DB
     DB <-->|Query Data| API
-    API <-->|Cache Results| REDIS
     API <-->|REST API| DASH
     
     %% Styling
@@ -45,12 +40,11 @@ flowchart TD
     linkStyle 0 stroke:#1976d2,stroke-width:3px,color:#000
     linkStyle 1 stroke:#388e3c,stroke-width:3px,color:#000
     linkStyle 2 stroke:#1976d2,stroke-width:3px,color:#000
-    linkStyle 3 stroke:#7b1fa2,stroke-width:3px,color:#000
-    linkStyle 4 stroke:#f57c00,stroke-width:3px,color:#000
+    linkStyle 3 stroke:#f57c00,stroke-width:3px,color:#000
     
     class AV external;
-    class DOCKER1,DOCKER2,DOCKER3,DOCKER4 container;
-    class DB,REDIS storage;
+    class DOCKER1,DOCKER2,DOCKER3 container;
+    class DB storage;
     class DASH frontend;
 ```
 
@@ -58,7 +52,6 @@ flowchart TD
 
 - **Backend**: Python 3.11, FastAPI, SQLAlchemy
 - **Database**: PostgreSQL 15
-- **Cache**: Redis 7
 - **Frontend**: Flask, Plotly.js
 - **Containerization**: Docker, Docker Compose
 - **Data Processing**: Pandas, NumPy
@@ -163,7 +156,6 @@ docker-compose logs -f
 # View specific service logs
 docker-compose logs -f app
 docker-compose logs -f postgres
-docker-compose logs -f redis
 docker-compose logs -f dashboard
 
 # Check service status
@@ -196,7 +188,7 @@ docker-compose exec app python -c "import asyncio; from etl_pipeline import FedR
 
 1. **API Key Not Set**: Ensure your Alpha Vantage API key is properly set in `.env`
 2. **Database Connection**: Check PostgreSQL health with `docker-compose logs postgres`
-3. **Port Conflicts**: Ensure ports 5432, 6379, 8000, and 5001 are available
+3. **Port Conflicts**: Ensure ports 5432, 8000, and 5001 are available
 4. **API Rate Limits**: Alpha Vantage has rate limits; the ETL includes error handling
 
 ### Health Checks
