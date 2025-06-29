@@ -1,6 +1,6 @@
 # Federal Funds Rate Analytics Platform
 
-A comprehensive financial analytics platform for tracking and analyzing Federal Reserve interest rate changes. This system provides real-time insights into monetary policy trends through automated data collection, advanced analytics, and interactive visualizations.
+A financial analytics platform for tracking and analyzing Federal Reserve interest rate changes. This system provides real-time insights into monetary policy trends through automated data collection, advanced analytics, and interactive visualizations.
 
 ## Architecture
 
