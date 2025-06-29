@@ -1,20 +1,17 @@
-import os
-from dotenv import load_dotenv
 import httpx
 import pandas as pd
 from datetime import datetime
 from sqlalchemy.orm import Session
 from database import get_db, FederalFundsRate
+from config import Config, get_logger
 import logging
 
-load_dotenv()
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+config = Config()
+logger = get_logger(__name__)
 
 class FedRateETL:
     def __init__(self):
-        self.api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
+        self.api_key = config.ALPHA_VANTAGE_API_KEY
         self.base_url = "https://www.alphavantage.co/query"
         
     async def extract_data(self):

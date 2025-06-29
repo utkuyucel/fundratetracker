@@ -1,13 +1,12 @@
-import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, Column, Integer, Date, Numeric, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+from config import Config
 
-load_dotenv()
+config = Config()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dataeng:secure_password@localhost:5432/fed_analytics")
+DATABASE_URL = f"postgresql://{config.POSTGRES_USER}:{config.POSTGRES_PASSWORD}@{config.POSTGRES_HOST}:{config.POSTGRES_PORT}/{config.POSTGRES_DB}"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

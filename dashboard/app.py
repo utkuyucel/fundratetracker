@@ -1,17 +1,15 @@
 from flask import Flask, render_template, jsonify, request
 import requests
 from datetime import datetime, timedelta
-import logging
+from config import DashboardConfig, get_logger
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+config = DashboardConfig()
+logger = get_logger(__name__)
 
 app = Flask(__name__)
 
-# FastAPI backend URL
-# Use the service name defined in docker-compose.yml when running in Docker
-import os
-API_BASE_URL = os.environ.get("API_BASE_URL", "http://app:8000")
+# FastAPI backend URL from config
+API_BASE_URL = config.API_BASE_URL
 
 class FedRateDashboard:
     def __init__(self, api_base_url):
@@ -141,5 +139,4 @@ def health():
     })
 
 if __name__ == '__main__':
-    # Production deployment would disable debug mode
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)

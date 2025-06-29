@@ -1,12 +1,11 @@
 import asyncio
 import schedule
 import time
-import os
 from etl_pipeline import FedRateETL
-import logging
+from config import Config, get_logger
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+config = Config()
+logger = get_logger(__name__)
 
 async def run_etl_job():
     """Run the ETL pipeline"""
@@ -19,7 +18,7 @@ async def run_etl_job():
 
 def schedule_etl():
     """Schedule ETL job"""
-    interval = int(os.getenv("FETCH_INTERVAL", 3600))  # Default 1 hour
+    interval = config.FETCH_INTERVAL
     schedule.every(interval).seconds.do(lambda: asyncio.run(run_etl_job()))
     
     logger.info(f"ETL job scheduled every {interval} seconds")

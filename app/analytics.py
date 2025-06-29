@@ -1,8 +1,11 @@
 import pandas as pd
+import numpy as np
 from sqlalchemy.orm import Session
 from database import get_db, FederalFundsRate
 from datetime import datetime, timedelta
-import numpy as np
+from config import get_logger
+
+logger = get_logger(__name__)
 
 class FedRateAnalytics:
     def __init__(self):
