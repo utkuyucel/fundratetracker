@@ -1,0 +1,40 @@
+# ====================================
+# FUNDRATE TRACKER - UNIFIED REQUIREMENTS
+# ====================================
+
+# ====================================
+# SHARED DEPENDENCIES
+# ====================================
+python-dotenv==1.0.0
+pandas==2.1.4
+numpy==1.25.2
+
+# ====================================
+# APP MODULE DEPENDENCIES
+# ====================================
+# FastAPI and ASGI server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Database and ORM
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+
+# HTTP client and data validation
+httpx==0.25.2
+pydantic==2.5.0
+python-multipart==0.0.6
+
+# Task scheduling
+schedule==1.2.0
+
+# ====================================
+# DASHBOARD MODULE DEPENDENCIES  
+# ====================================
+# Flask web framework
+Flask==3.0.0
+Jinja2==3.1.2
+Werkzeug==3.0.1
+
+# HTTP client for dashboard
+requests==2.31.0
