@@ -25,12 +25,12 @@ class Config:
     # API key from environment file
     ALPHA_VANTAGE_API_KEY: Optional[str] = os.getenv("ALPHA_VANTAGE_API_KEY")
     
-    # Database configuration - environment variables take precedence
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "fundratetracker")
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "postgres")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "password")
-    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
-    POSTGRES_PORT: int = int(os.getenv("POSTGRES_PORT", "5432"))
+    # Database configuration - hardcoded values
+    POSTGRES_DB: str = "fed_analytics"
+    POSTGRES_USER: str = "dataeng"
+    POSTGRES_PASSWORD: str = "secure_password"
+    POSTGRES_HOST: str = "postgres"
+    POSTGRES_PORT: int = 5432
     
     # Application configuration
     FETCH_INTERVAL: int = 3600

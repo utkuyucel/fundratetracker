@@ -13,8 +13,8 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
-COPY . .
+# Copy dashboard files
+COPY dashboard/ .
 
 # Expose the port the app will run on
 EXPOSE 5001
